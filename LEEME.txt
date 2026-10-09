@@ -1,0 +1,30 @@
+¿CÓMO LO RECIBIÓ, CÓMO LO ENTREGÓ? — Prototipo funcional (Grupo 1)
+
+CÓMO ABRIRLO
+  Doble click en index.html. Se abre en el navegador, no necesita instalar nada.
+  (Con internet se ven las tipografías Merriweather y Barlow de la presentación.)
+
+QUÉ HAY EN LA CARPETA
+  index.html      → la estructura: qué cosas hay en la página
+  css/estilos.css → cómo se ven: colores, tamaños, animaciones, hover
+  js/datos.js     → los números y textos de cada presidente
+  js/app.js       → el comportamiento: dibuja los presidentes, abre la ficha,
+                    calcula el tamaño de los círculos, flechas y teclado
+  img/            → fondo de la presentación y fotos de los presidentes
+
+FOTOS
+  Guardar en img/presidentes/ con estos nombres exactos:
+  aylwin.jpg, frei.jpg, lagos.jpg, bachelet.jpg, pinera.jpg, boric.jpg
+  Si falta una, se muestran sus iniciales.
+
+INTERACCIONES
+  - Pasar el mouse sobre un presidente: la foto crece y toma color.
+  - Click en un presidente: abre su ficha.
+  - Flechas ← → (botones o teclado): presidente anterior o siguiente.
+  - Esc o "Los 8 presidentes": vuelve al inicio.
+  - Pasar el mouse sobre un círculo: muestra el dato exacto y el año.
+
+FUENTES
+  Banco Mundial, World Development Indicators (inflación, desempleo,
+  crecimiento del PIB y homicidios por 100 mil hab.).
+  Encuesta CEP (aprobación presidencial).

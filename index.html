@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Cómo lo recibió, cómo lo entregó?</title>
+
+  <!-- Tipografía (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- 👉 La letra se cambia AQUÍ (qué letra se descarga) y en css/estilo.css → --titulo y --cuerpo -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Nuestros estilos -->
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+
+<body>
+
+  <!-- Fondo: la bandera de la presentación, transparente y en segundo plano -->
+  <div class="fondo" aria-hidden="true"></div>
+
+  <!-- ===================== PANTALLA 1: INICIO ===================== -->
+  <main id="inicio" class="pantalla activa">
+
+    <!-- 1. PORTADA: la frase grande. Al bajar, se achica hacia arriba
+         y aparece la motivación (el movimiento está en js/app.js → animarPortada) -->
+    <section class="intro">
+      <div class="intro-pegado">
+
+        <header class="portada">
+          <p class="kicker">Chile&nbsp;&nbsp;1990 – 2026</p>
+          <h1> Más Cuentas, <br>Menos Cuentos</h1>
+          <!-- Mapa de Chile acostado, como subtítulo (norte a la izquierda) -->
+          <img class="mapa" src="fotos/mapa_chile.png" alt="Mapa de Chile">
+        </header>
+
+        <div class="motivacion">
+          <p class="frase">Cada gobierno recibe un país y entrega otro.</p>
+          <p>Pusimos cara a cara los datos reales con lo que opinaba la gente,
+          para que cada quien saque sus propias conclusiones.</p>
+        </div>
+
+        <p class="pista">Baja para empezar ↓</p>
+      </div>
+    </section>
+
+
+    <!-- 2. MINI HISTORIAS: aparecen a medida que bajas.
+         👉 Para cambiar una foto, cambien solo el nombre del archivo en src="fotos/..."
+            (la foto tiene que estar en la carpeta fotos/)
+         Las historias "con-collage" muestran varias fotos encimadas y más grandes.  -->
+    <section class="historias">
+
+      <article class="historia">
+        <img class="espacio-foto" src="fotos/varios presidentes,5de6.jpg" alt="Cinco presidentes juntos">
+        <p>Desde 1990, Chile ha tenido 8 gobiernos y solo 6 presidentes.</p>
+      </article>
+
+      <!-- Historia con COLLAGE: varias fotos encimadas y un poco giradas.
+           --giro = cuánto se gira cada foto (en grados). -->
+      <article class="historia con-collage">
+        <div class="collage collage-crisis">
+          <img class="pieza" src="fotos/los33.jpg" alt="Mensaje de los 33 mineros" style="--giro:-3deg">
+          <img class="pieza" src="fotos/yomevacuno.jpg" alt="Carnet de vacunación Yo me vacuno" style="--giro:2.5deg">
+          <img class="pieza" src="fotos/terremoto valdivia.jpg" alt="Calle partida por un terremoto" style="--giro:-1deg">
+        </div>
+        <p>A unos les tocó crecer. A otros, crisis, terremotos o una pandemia.</p>
+      </article>
+
+      <article class="historia">
+        <img class="espacio-foto" src="fotos/18oct.jpg" alt="Protesta en la calle">
+        <p>Cada uno recibió un país y lo entregó distinto.</p>
+      </article>
+
+      <article class="historia con-collage">
+        <div class="collage collage-cep">
+          <img class="pieza" src="fotos/CEP.jpg.png" alt="Portada de una encuesta CEP" style="--giro:-2deg">
+          <img class="pieza" src="fotos/CEP8x6_0.jpg" alt="Logo del Centro de Estudios Públicos" style="--giro:3deg">
+        </div>
+        <p>Y en cada gobierno, la encuesta CEP midió cuánto los aprobaba la gente.</p>
+      </article>
+
+      <article class="historia">
+        <img class="espacio-foto" src="fotos/calzo.jpg" alt="Marcha masiva con una bandera de Chile">
+        <p>¿Calzó lo que sintió la gente con lo que muestran los datos?</p>
+      </article>
+
+    </section>
+
+
+    <!-- 3. LOS PRESIDENTES: llegan al final -->
+    <section id="presidentes" class="seccion-presidentes">
+      <p class="bajada">
+        <span class="destacado">8 presidentes.</span>
+        Elige uno y mira qué le tocó, qué hizo y qué pensó la gente.
+      </p>
+
+      <!-- Aquí JavaScript dibuja los 8 presidentes (ver js/app.js → dibujarInicio) -->
+      <ol id="lista-presidentes" class="presidentes"></ol>
+    </section>
+
+  </main>
+
+
+  <!-- ===================== PANTALLA 2: FICHA ===================== -->
+  <!-- Una sola ficha que se rellena con el presidente que elijas -->
+  <section id="ficha" class="pantalla">
+
+    <nav class="barra">
+      <a href="#presidentes" class="volver">← Los 8 presidentes</a>
+      <div class="flechas">
+        <button id="anterior" aria-label="Presidente anterior">←</button>
+        <span id="contador">1 de 8</span>
+        <button id="siguiente" aria-label="Presidente siguiente">→</button>
+      </div>
+    </nav>
+
+    <!-- Quién es -->
+    <header class="ficha-cabeza">
+      <img id="ficha-foto" class="foto grande" alt="">
+      <div>
+        <h2 id="ficha-nombre">Nombre</h2>
+        <p id="ficha-periodo" class="periodo">0000 – 0000</p>
+      </div>
+    </header>
+
+  </section>
+
+  <!-- Primero los datos, después el código que los usa -->
+  <script src="js/datos.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
