@@ -13,6 +13,11 @@
   --recibio: #d9d9d9;             /* cómo lo recibió (gris claro) */
   --entrego: #1e1e1e;             /* cómo lo entregó (oscuro) */
 
+  /* Colores de la torta de aprobación (los de la foto que mandaron) */
+  --aprueba:    #2b5ba6;          /* azul */
+  --desaprueba: #e6457a;          /* rosado */
+  --otros:      #3d9bda;          /* celeste */
+
   /* 👉 LA LETRA: se cambia aquí (y en index.html, en el link de Google Fonts) */
   --titulo: "Inter", Arial, sans-serif;
   --cuerpo: "Inter", Arial, sans-serif;
@@ -173,12 +178,67 @@ h1 {
 }
 
 
+/* 2b. ¿QUÉ SON? */
+.que-son { padding: 140px 0 60px; }
+.que-son-titulo {
+  font-size: clamp(36px, 5vw, 72px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+  margin-bottom: 72px;
+}
+.eje-nombre {
+  font-size: clamp(22px, 2vw, 28px); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  margin: 40px 0 24px;
+}
+
+/* Cada dato: foto grande a la izquierda, texto a la derecha */
+.dato-explicado {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 96px; align-items: center;
+  margin-bottom: 80px;
+  /* Escalera: cada bloque parte un poco más a la derecha (--paso viene del HTML) */
+  padding-left: calc(var(--paso) * 4%);
+}
+
+/* La foto con su nombre pegado al costado izquierdo */
+.dato-foto {
+  display: flex; align-items: stretch; gap: 14px;
+  /* INTERACCIÓN: al bajar, la foto se corre un poco a la derecha (--mover lo calcula app.js, de 0 a 1) */
+  transform: translateX(calc(var(--mover, 0) * 45px));
+  transition: transform 0.1s linear;
+}
+.foto-dato {
+  display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover;
+  background: rgba(0, 0, 0, 0.06);
+}
+/* El nombre en vertical, pegado a la foto, leyéndose de lado (de abajo hacia arriba) */
+.dato-titulo {
+  order: -1;                                  /* va antes que la foto, a la izquierda */
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  color: var(--texto);
+  font-size: clamp(30px, 3.2vw, 48px); font-weight: 800; letter-spacing: 0.02em; line-height: 1;
+  text-transform: uppercase;
+}
+.dato-foto .foto-dato { flex: 1; min-width: 0; }
+
+.dato-texto p { font-size: clamp(20px, 1.7vw, 26px); line-height: 1.35; margin-bottom: 12px; }
+.dato-texto .dato-frase { font-size: clamp(28px, 2.8vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px; }
+.dato-texto .dato-medida { font-size: clamp(16px, 1.3vw, 19px); color: var(--suave); margin-top: 18px; }
+.dato-texto .dato-medida + .dato-medida { margin-top: 8px; }
+
+/* INTERACCIÓN: cada bloque aparece al llegar a él */
+.dato-explicado .dato-texto { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.dato-explicado .foto-dato  { opacity: 0; transition: opacity 0.7s ease; }
+.dato-explicado.visible .dato-texto { opacity: 1; transform: none; transition-delay: 0.15s; }
+.dato-explicado.visible .foto-dato  { opacity: 1; }
+
+
 /* 3. LOS PRESIDENTES */
 .seccion-presidentes { padding: 120px 0 40px; }
-.bajada { max-width: 640px; font-size: 26px; color: var(--suave); margin-bottom: 56px; }
+.bajada { max-width: 640px; font-size: 26px; color: var(--texto); margin-bottom: 56px; }   /* color: negro */
 .bajada .destacado {
   display: block;        /* lo deja en su propia línea */
   margin-bottom: 16px;   /* espacio entre "8 presidentes." y el texto de abajo */
+  font-size: 52px;       /* el doble del texto de abajo (26px x 2) */
+  line-height: 1.1;
   font-weight: 800;      /* más marcada */
   color: var(--texto);   /* negra, no gris */
 }
@@ -232,6 +292,17 @@ h1 {
 /* ---------- FICHA ---------- */
 .barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
 .volver { text-decoration: none; color: var(--suave); }
+
+/* Botón "¿Qué son? / DATOS: Economía y seguridad" al lado de volver */
+.barra-izq { display: flex; align-items: flex-end; gap: 32px; }
+.que-son-boton { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; }
+.que-son-pregunta { font-size: 15px; color: var(--suave); }
+.que-son-caja {
+  border: 1px solid var(--texto);
+  padding: 8px 16px; font-size: 16px;
+  transition: background 0.2s, color 0.2s;
+}
+.que-son-boton:hover .que-son-caja { background: var(--texto); color: var(--fondo); }
 .volver:hover { color: var(--texto); }
 .flechas { display: flex; align-items: center; gap: 14px; color: var(--suave); font-size: 16px; }
 .flechas button {
@@ -246,6 +317,90 @@ h1 {
 h2 { font-family: var(--titulo); font-weight: 800; letter-spacing: -0.03em; font-size: clamp(38px, 5vw, 64px); line-height: 1.1; }
 .ficha-cabeza .periodo { color: var(--suave); font-size: 22px; }
 
+/* AÑO A AÑO: 4 columnas (año, percepción, economía, seguridad) */
+.anios-cabeza, .fila-anio {
+  display: grid;
+  grid-template-columns: 100px 280px 1fr 1fr;
+  gap: 0 40px;
+}
+.anios-cabeza {
+  margin-top: 56px; padding-bottom: 14px;
+  font-size: 27px; font-weight: 700; line-height: 1.15;   /* 16px x 5/3 */
+}
+/* "Percepción ciudadana" centrado sobre las tortas (que miden 240px) */
+.anios-cabeza span:nth-child(2) { width: 240px; text-align: center; }
+/* "Año" centrado sobre los números de los años */
+.anios-cabeza span:nth-child(1) { text-align: center; }
+.anios-cabeza small { display: block; font-size: 22px; font-weight: 400; color: var(--suave); margin-top: 4px; }   /* 13px x 5/3 */
+
+.fila-anio { align-items: center; padding: 72px 0; }
+.anio-numero { font-size: 36px; font-weight: 800; letter-spacing: -0.02em; text-align: center; }
+
+/* Columnas de economía y seguridad: vacías por ahora, separadas por una línea fina */
+.celda-eje { align-self: stretch; border-left: 1px solid var(--linea); min-height: 200px; }
+.anios-cabeza span:nth-child(3), .anios-cabeza span:nth-child(4) { border-left: 1px solid var(--linea); padding-left: 16px; }
+
+/* ECONOMÍA: carro (inflación) arriba y mesa (desempleo) abajo */
+.celda-economia { display: flex; flex-direction: column; justify-content: center; gap: 22px; padding-left: 24px; }
+.eco-item { display: flex; align-items: center; gap: 18px; }
+.eco-num { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.eco-label { font-size: 16px; font-weight: 600; margin-top: 4px; }
+.eco-detalle { font-size: 15px; color: var(--suave); margin-top: 2px; }
+
+.carros { display: flex; gap: 2px; flex: none; }
+.carro { width: 130px; height: auto; display: block; }
+
+/* La mesa: la foto y encima la tajada (un círculo justo sobre la mesa dibujada) */
+.mesa { position: relative; width: 120px; flex: none; }
+.mesa img { display: block; width: 100%; height: auto; }
+.mesa-tajada {
+  position: absolute; left: 20.7%; top: 24.5%; width: 62.6%; height: 59.7%;
+  border-radius: 50%;
+  background: conic-gradient(rgba(226, 75, 74, 0.7) 0 var(--pct), transparent var(--pct) 100%);
+}
+
+/* LA TORTA (dona): los colores van de 0 a --fin1, de --fin1 a --fin2 y el resto */
+.torta {
+  position: relative;
+  width: 240px; aspect-ratio: 1; border-radius: 50%;
+  background: conic-gradient(
+    var(--aprueba)    0 var(--fin1),
+    var(--desaprueba) var(--fin1) var(--fin2),
+    var(--otros)      var(--fin2) 100%
+  );
+}
+/* El hoyo blanco del centro, con los números adentro */
+.torta-centro {
+  position: absolute; inset: 22%;
+  border-radius: 50%; background: var(--fondo);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; font-size: 13px; line-height: 1.15; text-align: center;
+}
+.torta-centro b { font-size: 20px; font-weight: 800; }
+.t-aprueba    { color: var(--aprueba); }
+.t-desaprueba { color: var(--desaprueba); }
+.t-otros      { color: var(--otros); }
+
+/* HITOS: un punto y el texto, entre los años */
+.hito-punto {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; font-size: 16px; color: var(--suave);
+}
+.hito-punto::before {
+  content: ""; flex: none;
+  width: 10px; height: 10px; border-radius: 50%; background: var(--texto);
+  margin-left: 4px;
+}
+.hito-punto b { color: var(--texto); }
+
+.anios-pendiente { margin-top: 24px; color: var(--suave); }
+/* Año sin encuesta: un texto en el lugar de la torta */
+.sin-encuesta { width: 240px; text-align: center; color: var(--suave); font-size: 17px; }
+
+/* INTERACCIÓN: cada año (y cada hito) aparece al llegar a él */
+.fila-anio, .hito-punto { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fila-anio.visible, .hito-punto.visible { opacity: 1; transform: none; }
+
 /* En pantallas grandes, los 8 en una sola fila */
 @media (min-width: 1250px) {
   .presidentes { grid-template-columns: repeat(8, 1fr); }
@@ -254,6 +409,18 @@ h2 { font-family: var(--titulo); font-weight: 800; letter-spacing: -0.03em; font
 /* ---------- CELULAR ---------- */
 @media (max-width: 600px) {
   .pantalla { padding: 28px 18px 72px; }
+  .dato-explicado { grid-template-columns: 1fr; gap: 20px; padding-left: calc(var(--paso) * 3%); }
+  .dato-foto { transform: none; }
+  .dato-titulo { font-size: 26px; }
+  .barra { flex-wrap: wrap; gap: 16px; }
+  .barra-izq { flex-wrap: wrap; gap: 16px; }
+  .anios-cabeza { display: none; }
+  .fila-anio { grid-template-columns: auto 1fr; gap: 20px; padding: 40px 0; }
+  .celda-seguridad { display: none; }
+  .celda-economia { grid-column: 1 / -1; border-left: none; padding-left: 0; }
+  .carro { width: 105px; }
+  .mesa { width: 100px; }
+  .torta { width: 220px; }
   .historia, .historia:nth-child(even),
   .historia.con-collage, .historia.con-collage:nth-child(even) { grid-template-columns: 1fr; gap: 24px; min-height: 70vh; }
   .historia.con-collage:nth-child(even) .collage { order: 0; }
@@ -268,4 +435,6 @@ h2 { font-family: var(--titulo); font-weight: 800; letter-spacing: -0.03em; font
 @media (prefers-reduced-motion: reduce) {
   .historia .espacio-foto, .historia p, .presidentes li { opacity: 1; transform: none; transition: none; }
   .pieza { opacity: 1; transform: rotate(var(--giro)); transition: none; }
+  .dato-explicado .dato-texto, .dato-explicado .foto-dato, .fila-anio, .hito-punto { opacity: 1; transform: none; transition: none; }
+  .dato-foto { transform: none; }
 }

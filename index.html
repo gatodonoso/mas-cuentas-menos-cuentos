@@ -63,7 +63,7 @@
         <div class="collage collage-crisis">
           <img class="pieza" src="fotos/los33.jpg" alt="Mensaje de los 33 mineros" style="--giro:-3deg">
           <img class="pieza" src="fotos/yomevacuno.jpg" alt="Carnet de vacunación Yo me vacuno" style="--giro:2.5deg">
-          <img class="pieza" src="fotos/terremoto valdivia.jpg" alt="Calle partida por un terremoto" style="--giro:-1deg">
+          <img class="pieza" src="fotos/terremoto 2010.jpg" alt="terremoto" style="--giro:-1deg">
         </div>
         <p>A unos les tocó crecer. A otros, crisis, terremotos o una pandemia.</p>
       </article>
@@ -82,10 +82,74 @@
       </article>
 
       <article class="historia">
-        <img class="espacio-foto" src="fotos/calzo.jpg" alt="Marcha masiva con una bandera de Chile">
-        <p>¿Calzó lo que sintió la gente con lo que muestran los datos?</p>
+        <img class="espacio-foto" src="fotos/calzo.jpg" alt="marcha">
+        <p>¿Calza lo que siente la gente con lo que muestran los datos?</p>
       </article>
 
+    </section>
+
+
+    <!-- 2b. ¿QUÉ SON? Qué medimos, explicado simple.
+         El botón "¿Qué son?" de cada ficha trae de vuelta hasta aquí (#que-son).
+         Cada bloque: foto a la izquierda (con el título en la esquina) y texto a la derecha.
+         --paso = cuánto se corre a la derecha cada bloque (0, 1, 2, 3).
+         👉 Para poner una foto, cambien <div class="foto-dato"></div>
+            por <img class="foto-dato" src="fotos/NOMBRE.jpg" alt="descripción">  -->
+    <section id="que-son" class="que-son">
+      <h2 class="que-son-titulo">Para poder responder, miramos:</h2>
+
+      <p class="eje-nombre">Economía</p>
+
+      <article class="dato-explicado" style="--paso:0">
+        <figure class="dato-foto">
+          <img class="foto-dato" src="fotos/inflacion,carritosuper.jpg" alt="Carros de supermercado con precios que suben">
+          <h3 class="dato-titulo">Inflación</h3>
+        </figure>
+        <div class="dato-texto">
+          <p class="dato-frase">Es lo que más se nota en el bolsillo.</p>
+          <p>Todo está más caro: el súper, la cuenta de la luz, el arriendo.</p>
+          <p class="dato-medida">Se mide con el IPC (Índice de Precios al Consumidor) del Banco Central: cuánto subieron los precios de diciembre a diciembre.</p>
+          <p class="dato-medida"><b>El carro:</b> hoy (2025) un carro lleno de compras cuesta apx. $200.000. O sea, con $50.000 llenas un cuarto. En cada año te mostramos para cuánto alcanzaban esos mismos $50.000.</p>
+          <p class="dato-medida">Ojo: los sueldos también cambiaron. El carro muestra solo los precios.</p>
+        </div>
+      </article>
+
+      <article class="dato-explicado" style="--paso:1">
+        <figure class="dato-foto">
+          <img class="foto-dato" src="fotos/empleo.jpg" alt="Fila de personas afuera de una oficina de empleo">
+          <h3 class="dato-titulo">Desempleo</h3>
+        </figure>
+        <div class="dato-texto">
+          <p class="dato-frase">¿Hay pega o no hay pega?</p>
+          <p>Cuánta gente busca trabajo y no lo encuentra.</p>
+          <p class="dato-medida">Se mide en %: de cada 100 personas que quieren trabajar, cuántas no encuentran pega.</p>
+          <p class="dato-medida"><b>La mesa:</b> la parte pintada son los que buscan pega y no la encuentran. Datos del INE, vía Banco Central. En 2010 el INE cambió su forma de medir.</p>
+        </div>
+      </article>
+
+      <p class="eje-nombre">Seguridad</p>
+
+      <article class="dato-explicado" style="--paso:2">
+        <figure class="dato-foto">
+          <img class="foto-dato" src="fotos/homicidios.jpg" alt="Peritos de la PDI trabajando en el sitio de un crimen">
+          <h3 class="dato-titulo">Homicidios</h3>
+        </figure>
+        <div class="dato-texto">
+          <p class="dato-frase">Cuántas personas son asesinadas en Chile cada año.</p>
+          <p class="dato-medida">Se cuenta por cada 100.000 habitantes.</p>
+        </div>
+      </article>
+
+      <article class="dato-explicado" style="--paso:3">
+        <figure class="dato-foto">
+          <img class="foto-dato" src="fotos/Portonazos.jpg" alt="Cámara de seguridad graba un portonazo de noche">
+          <h3 class="dato-titulo">Delitos</h3>
+        </figure>
+        <div class="dato-texto">
+          <p class="dato-frase">Robos, asaltos y portonazos.</p>
+          <p>Lo que le puede pasar a cualquiera en la calle o en su casa.</p>
+        </div>
+      </article>
     </section>
 
 
@@ -108,7 +172,14 @@
   <section id="ficha" class="pantalla">
 
     <nav class="barra">
-      <a href="#presidentes" class="volver">← Los 8 presidentes</a>
+      <div class="barra-izq">
+        <a href="#presidentes" class="volver">← Los 8 presidentes</a>
+        <!-- Lleva a la explicación de los datos, en el inicio -->
+        <a href="#que-son" class="que-son-boton">
+          <span class="que-son-pregunta">¿Qué son?</span>
+          <span class="que-son-caja"><b>DATOS:</b> Economía y seguridad</span>
+        </a>
+      </div>
       <div class="flechas">
         <button id="anterior" aria-label="Presidente anterior">←</button>
         <span id="contador">1 de 8</span>
@@ -124,6 +195,16 @@
         <p id="ficha-periodo" class="periodo">0000 – 0000</p>
       </div>
     </header>
+
+    <!-- AÑO A AÑO: una fila por año, y los hitos entre medio.
+         Lo dibuja js/app.js → dibujarAnios, con los datos de js/datos.js → anios / hitos -->
+    <div class="anios-cabeza">
+      <span>Año</span>
+      <span>Percepción ciudadana</span>
+      <span>Inflación y desempleo<small>Economía</small></span>
+      <span>Homicidios y delitos<small>Seguridad</small></span>
+    </div>
+    <div id="ficha-anios" class="anios"></div>
 
   </section>
 
