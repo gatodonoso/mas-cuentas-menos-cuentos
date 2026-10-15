@@ -1,8 +1,4 @@
-/* =====================================================================
-   DATOS DEL PROYECTO
-   ---------------------------------------------------------------------
-   Este archivo SOLO guarda información. No dibuja nada.
-   Si quieren cambiar un número, un texto o agregar un hito, se hace aquí.
+/* datos del pryecto, solo se guarda info
 
    Fuentes:
    - Inflación, desempleo, crecimiento y homicidios: Banco Mundial (WDI).
@@ -11,12 +7,12 @@
      null = no hay dato.
    - Aprobación: encuesta CEP (al final del 1er año y al final del mandato).
    - Congreso: ver lámina "¿Tenía mayoría en el Congreso?" del PPT.
-   ===================================================================== */
-
+*/
 
 /* Los temas que se comparan.
    mejor: "bajo" → que el número baje es bueno (inflación, desempleo...)
           "alto" → que el número suba es bueno (crecimiento)            */
+
 const INDICADORES = [
   { clave: "inflacion",   nombre: "Inflación",   pregunta: "¿Cuánto subían los precios?",       unidad: "%",          mejor: "bajo" },
   { clave: "desempleo",   nombre: "Desempleo",   pregunta: "¿Cuántos estaban sin pega?",        unidad: "%",          mejor: "bajo" },
@@ -25,16 +21,12 @@ const INDICADORES = [
 ];
 
 
-/* =====================================================================
-   ECONOMÍA AÑO A AÑO (lo usan los carros y la mesa de cada ficha)
-   ===================================================================== */
+/* ECONOMÍA AÑO A AÑO (lo usan los carros y la mesa de cada ficha)
+ */
 
-/* INFLACIÓN: variación del IPC de diciembre a diciembre (%).
-   Fuente: Banco Central de Chile (BDE) e INE.
-   - 2011–2025: BCCh, cuadro "IPC variación mensual y anual".
-   - 1989–2010: índices del INE (oficios INE, Memorias del BCCh, MOP).
-   Con esto también se calcula el CARRO: cuánto alcanzaban $50.000 cada año,
-   tomando como referencia que hoy (2025) un carro lleno cuesta $200.000. */
+/* inflacion:  variación del IPC de diciembre a diciembre en %
+   
+   Con esto se dibuja el CARRO de cada año (ver js/app.js → alcanza). */
 const IPC_DIC = {
   1989: 21.4, 1990: 27.3, 1991: 18.7, 1992: 12.7, 1993: 12.2, 1994: 8.9,
   1995: 8.2,  1996: 6.6,  1997: 6.0,  1998: 4.7,  1999: 2.3,  2000: 4.5,
@@ -44,12 +36,11 @@ const IPC_DIC = {
   2019: 3.0,  2020: 3.0,  2021: 7.2,  2022: 12.8, 2023: 3.9,  2024: 4.5,
   2025: 3.5
 };
-const CARRO = { pesos: 50000, carroLlenoHoy: 200000, anioHoy: 2025 };
 
-/* DESEMPLEO: tasa de desocupación, promedio del año (%).
+/* desempleo: tasa de desocupación, promedio del año (%).
    Fuente: Banco Central de Chile (BDE), con datos del INE.
-   ⚠️ En 2010 el INE cambió su forma de medir: compara con cuidado
-   los años antes de 2010 con los de después. */
+
+   */
 const DESEMPLEO = {
   1990: 7.8,  1991: 8.2,  1992: 6.7,  1993: 6.5,  1994: 7.8,  1995: 7.4,
   1996: 6.5,  1997: 6.1,  1998: 6.2,  1999: 10.0, 2000: 9.7,  2001: 9.9,
@@ -59,17 +50,37 @@ const DESEMPLEO = {
   2020: 10.6, 2021: 9.1,  2022: 7.8,  2023: 8.6,  2024: 8.5,  2025: 8.5
 };
 
+/* HOMICIDIOS: víctimas de homicidio por cada 100.000 habitantes. Dos fuentes:
+*/
+
+const HOMICIDIOS = {
+  2000: 3.4, 2001: 3.6, 2002: 3.7, 2003: 3.2, 2004: 3.7,
+  2005: 3.5, 2006: 3.6, 2007: 3.7, 2008: 3.5, 2009: 3.7, 2010: 3.1,
+  2011: 3.7, 2012: 2.5, 2013: 3.1, 2014: 2.5, 2015: 2.3, 2016: 3.4,
+  2017: 4.2,
+  2018: 4.5, 2019: 4.9, 2020: 5.8, 2021: 4.7, 2022: 6.8, 2023: 6.3,
+  2024: 6.1, 2025: 5.4
+};
+// Años 90: sin dato exacto, solo aproximado
+const HOMICIDIOS_ANIOS90 = { desde: 1990, hasta: 1999, texto: "menos de 3,5" };
+
+/* ROBOS VIOLENTOS: casos policiales (denuncias + detenciones en el momento) de todo Chile.
+   . */
+
+const ROBOS_VIOLENTOS = {
+  2005: 74348,  2006: 78134,  2007: 93344,  2008: 89494,  2009: 91758,
+  2010: 81541,  2011: 91798,  2012: 81520,  2013: 92904,  2014: 106175,
+  2015: 106322, 2016: 101966, 2017: 104454, 2018: 107845, 2019: 111133,
+  2020: 86709,  2021: 65490,  2022: 107317, 2023: 116435, 2024: 120548,
+  2025: 109419
+};
+
 
 /* Los 8 gobiernos, en orden.
    foto: la imagen va en la carpeta fotos/ con ese nombre exacto.
    le_toco: tipo "mundial" (le pasó a todos los países) o "nacional" (solo a Chile).
-   calza: AQUÍ VA SU LECTURA. Es el trasfondo del proyecto: escríbanlo ustedes.
 
-   anios: una fila por año en la ficha. Aprobación = última encuesta CEP de ese año
-          (si la encuesta empezó en diciembre y terminó en enero, cuenta para el año en que la CEP la fecha).
-          "otros" no se escribe: se calcula solo (100 − aprueba − desaprueba).
-          Si un año no hubo encuesta: { anio: 2020, nota: "..." } (sin aprueba ni desaprueba).
-   hitos: aparecen como un punto ANTES de la fila de su "anio". */
+    */
 const PRESIDENTES = [
   {
     id: "aylwin", nombre: "Patricio Aylwin", periodo: "1990 – 1994", partido: "PDC",
@@ -92,7 +103,8 @@ const PRESIDENTES = [
       { anio: 1993, aprueba: 51, desaprueba: 19, encuesta: "CEP nov. 1993" }
     ],
     hitos: [
-      { anio: 1990, fecha: "Mar. 1990", texto: "La vuelta a la democracia" }
+      { anio: 1990, fecha: "Marzo de 1990", texto: "Retorno a la democracia",
+        detalle: "Patricio Aylwin asumió la presidencia tras la dictadura militar. Comenzó una etapa de recuperación democrática." }
     ],
     calza: ""
   },
@@ -119,7 +131,8 @@ const PRESIDENTES = [
       { anio: 1999, aprueba: 32, desaprueba: 40, encuesta: "CEP abr.–may. 1999 (de la de sep.–oct. solo se conoce el 28% de aprobación)" }
     ],
     hitos: [
-      { anio: 1998, fecha: "1998 – 1999", texto: "Crisis asiática" }
+      { anio: 1998, fecha: "1998 – 1999", texto: "Impacto de la crisis asiática",
+        detalle: "La crisis iniciada en Asia golpeó el comercio y el financiamiento internacional. En Chile, el deterioro de la economía internacional y el ajuste económico interno contribuyeron a la recesión de 1999." }
     ],
     calza: ""
   },
@@ -146,7 +159,8 @@ const PRESIDENTES = [
       { anio: 2005, aprueba: 59, desaprueba: 23, encuesta: "CEP oct.–nov. 2005" }
     ],
     hitos: [
-      { anio: 2004, fecha: "Desde 2004", texto: "Sube fuerte el precio del cobre" }
+      { anio: 2004, fecha: "Desde 2004", texto: "Fuerte alza del cobre",
+        detalle: "El precio internacional del cobre aumentó con fuerza, elevando los ingresos de la minería y los excedentes de Codelco. Chile recibió un impulso económico desde su principal producto de exportación." }
     ],
     calza: ""
   },
@@ -172,8 +186,10 @@ const PRESIDENTES = [
       { anio: 2009, aprueba: 78, desaprueba: 11, encuesta: "CEP oct. 2009" }
     ],
     hitos: [
-      { anio: 2008, fecha: "2008", texto: "Boom crisis financiera mundial (07-09)" },
-      { anio: 2010, fecha: "Feb. 2010",   texto: "Terremoto del 27F, a días de irse" }
+      { anio: 2008, fecha: "2008 – 2009", texto: "Crisis financiera mundial",
+        detalle: "La crisis financiera internacional debilitó la actividad económica en Chile. El país enfrentó una recesión y el Banco Central redujo fuertemente las tasas de interés para responder al deterioro económico." },
+      { anio: 2010, fecha: "Febrero de 2010", texto: "Terremoto y tsunami del 27F",
+        detalle: "Un terremoto de magnitud 8,8 y un tsunami golpearon la zona centro-sur de Chile. La emergencia ocurrió al final del mandato y dejó una reconstrucción que continuaría durante los gobiernos siguientes." }
     ],
     calza: ""
   },
@@ -198,7 +214,8 @@ const PRESIDENTES = [
       { anio: 2013, aprueba: 34, desaprueba: 46, encuesta: "CEP sep.–oct. 2013" }
     ],
     hitos: [
-      { anio: 2010, fecha: "2010", texto: "Reconstruir el país tras el 27F" }
+      { anio: 2010, fecha: "Desde 2010", texto: "Reconstrucción tras el 27F",
+        detalle: "El gobierno asumió con el desafío de recuperar viviendas, infraestructura y localidades afectadas por el terremoto y tsunami. La reconstrucción se extendió durante su mandato y dejó tareas pendientes para el siguiente." }
     ],
     calza: ""
   },
@@ -224,9 +241,12 @@ const PRESIDENTES = [
       { anio: 2017, aprueba: 23, desaprueba: 53, encuesta: "CEP sep.–oct. 2017" }
     ],
     hitos: [
-      { anio: 2014, fecha: "Desde 2014", texto: "Baja el precio del cobre" },
-      { anio: 2014, fecha: "Abr. 2014",  texto: "Terremoto de Iquique" },
-      { anio: 2015, fecha: "Sep. 2015",  texto: "Terremoto de Illapel" }
+      { anio: 2014, fecha: "2014 – 2016", texto: "Caída del precio del cobre",
+        detalle: "El cobre atravesó un período de precios bajos, con una fuerte caída en 2015. Este escenario presionó los ingresos de las empresas mineras y los recursos que Codelco aportaba al Estado." },
+      { anio: 2014, fecha: "Abril de 2014", texto: "Terremoto de Iquique",
+        detalle: "Un terremoto de magnitud 8,2 sacudió el norte de Chile el 1 de abril. El sismo y sus réplicas marcaron una emergencia al comienzo del segundo gobierno de Bachelet." },
+      { anio: 2015, fecha: "Septiembre de 2015", texto: "Terremoto de Illapel",
+        detalle: "El 16 de septiembre, un fuerte terremoto frente a Illapel sacudió la zona centro-norte y generó un tsunami. La región de Coquimbo enfrentó una nueva emergencia y necesidades de reconstrucción." }
     ],
     calza: ""
   },
@@ -252,8 +272,10 @@ const PRESIDENTES = [
       { anio: 2021, aprueba: 16, desaprueba: 68, encuesta: "CEP jul.–sep. 2021" }
     ],
     hitos: [
-      { anio: 2019, fecha: "Oct. 2019",   texto: "Estallido social" },
-      { anio: 2020, fecha: "2020 – 2021", texto: "Pandemia COVID-19" }
+      { anio: 2019, fecha: "Octubre de 2019", texto: "Estallido social",
+        detalle: "Las protestas por el transporte se ampliaron hacia demandas sociales y cuestionamientos al sistema político. Las movilizaciones estuvieron acompañadas de episodios de violencia y graves violaciones de derechos humanos." },
+      { anio: 2020, fecha: "Marzo de 2020", texto: "Llegada de la pandemia",
+        detalle: "Chile confirmó su primer caso de COVID-19 el 3 de marzo. La expansión de la enfermedad y las medidas sanitarias alteraron la vida cotidiana, el trabajo y el funcionamiento de la economía." }
     ],
     calza: ""
   },
@@ -279,8 +301,10 @@ const PRESIDENTES = [
       { anio: 2025, aprueba: 28, desaprueba: 62, encuesta: "CEP sep–oct 2025" }
     ],
     hitos: [
-      { anio: 2022, fecha: "2022",      texto: "Inflación en todo el mundo tras la pandemia" },
-      { anio: 2024, fecha: "Feb. 2024", texto: "Megaincendio de Viña del Mar" }
+      { anio: 2022, fecha: "2022", texto: "Fuerte aumento de la inflación",
+        detalle: "El alza de precios iniciada en 2021 continuó durante 2022. En Chile influyeron tanto factores internacionales como el fuerte aumento del consumo interno, impulsado por ayudas fiscales y retiros previsionales." },
+      { anio: 2024, fecha: "Febrero de 2024", texto: "Megaincendios en la región de Valparaíso",
+        detalle: "Los incendios afectaron gravemente a Viña del Mar, Quilpué y Villa Alemana. La destrucción de viviendas y barrios abrió una emergencia humanitaria y un proceso de reconstrucción habitacional y urbana." }
     ],
     calza: ""
   }

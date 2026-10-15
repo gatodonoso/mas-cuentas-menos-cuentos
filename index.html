@@ -1,37 +1,44 @@
 <!DOCTYPE html>
+<!-- abre el doc, el utf es para tildes y ñ, y el viewport es para que se vea bien en celulares -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>¿Cómo lo recibió, cómo lo entregó?</title>
 
-  <!-- Tipografía (Google Fonts) -->
+  <!-- tipografia y permisos -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- 👉 La letra se cambia AQUÍ (qué letra se descarga) y en css/estilo.css → --titulo y --cuerpo -->
+
+  <!-- letras formato Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- Nuestros estilos -->
+  <!-- conecta con css -->
   <link rel="stylesheet" href="css/estilo.css">
 </head>
 
+<!-- cierra cabeza yabre cuerpo -->
+
 <body>
 
-  <!-- Fondo: la bandera de la presentación, transparente y en segundo plano -->
+  <!-- class para css y aria-hidden para que no lo lea el lector de pantalla -->
   <div class="fondo" aria-hidden="true"></div>
 
-  <!-- ===================== PANTALLA 1: INICIO ===================== -->
+
+  <!-- main principal, con id para que se pueda ir  desde los links -->
   <main id="inicio" class="pantalla activa">
 
-    <!-- 1. PORTADA: la frase grande. Al bajar, se achica hacia arriba
-         y aparece la motivación (el movimiento está en js/app.js → animarPortada) -->
+    <!-- section, es una seccion y header es el encabezado de la seccion, br es salto linea y h1 es el titulo principal, img es imagen y alt es texto alternativo para lectores de pantalla -->
     <section class="intro">
-      <div class="intro-pegado">
+
+        <!-- caja <div> para que el contenido quede pegado con sticky y no se mueva al hacer scroll -->
+        <div class="intro-pegado"> 
 
         <header class="portada">
           <p class="kicker">Chile&nbsp;&nbsp;1990 – 2026</p>
           <h1> Más Cuentas, <br>Menos Cuentos</h1>
-          <!-- Mapa de Chile acostado, como subtítulo (norte a la izquierda) -->
+          <!-- class mapa para luego dejar de lado el mapa -->
           <img class="mapa" src="fotos/mapa_chile.png" alt="Mapa de Chile">
         </header>
 
@@ -46,19 +53,15 @@
     </section>
 
 
-    <!-- 2. MINI HISTORIAS: aparecen a medida que bajas.
-         👉 Para cambiar una foto, cambien solo el nombre del archivo en src="fotos/..."
-            (la foto tiene que estar en la carpeta fotos/)
-         Las historias "con-collage" muestran varias fotos encimadas y más grandes.  -->
+    <!-- aparecen a medida que bajas. -->
     <section class="historias">
 
       <article class="historia">
-        <img class="espacio-foto" src="fotos/varios presidentes,5de6.jpg" alt="Cinco presidentes juntos">
+        <img class="espacio-foto" src="fotos/varios presidentes,5de6.jpg" alt="5/6 presidentes de Chile desde 1990">
         <p>Desde 1990, Chile ha tenido 8 gobiernos y solo 6 presidentes.</p>
       </article>
 
-      <!-- Historia con COLLAGE: varias fotos encimadas y un poco giradas.
-           --giro = cuánto se gira cada foto (en grados). -->
+      <!-- Historia con-collage: varias fotos encimadas y un poco giradas.-->
       <article class="historia con-collage">
         <div class="collage collage-crisis">
           <img class="pieza" src="fotos/los33.jpg" alt="Mensaje de los 33 mineros" style="--giro:-3deg">
@@ -89,12 +92,8 @@
     </section>
 
 
-    <!-- 2b. ¿QUÉ SON? Qué medimos, explicado simple.
-         El botón "¿Qué son?" de cada ficha trae de vuelta hasta aquí (#que-son).
-         Cada bloque: foto a la izquierda (con el título en la esquina) y texto a la derecha.
-         --paso = cuánto se corre a la derecha cada bloque (0, 1, 2, 3).
-         👉 Para poner una foto, cambien <div class="foto-dato"></div>
-            por <img class="foto-dato" src="fotos/NOMBRE.jpg" alt="descripción">  -->
+    <!--  el id es para ir desde que son.
+      -->
     <section id="que-son" class="que-son">
       <h2 class="que-son-titulo">Para poder responder, miramos:</h2>
 
@@ -107,10 +106,13 @@
         </figure>
         <div class="dato-texto">
           <p class="dato-frase">Es lo que más se nota en el bolsillo.</p>
-          <p>Todo está más caro: el súper, la cuenta de la luz, el arriendo.</p>
-          <p class="dato-medida">Se mide con el IPC (Índice de Precios al Consumidor) del Banco Central: cuánto subieron los precios de diciembre a diciembre.</p>
-          <p class="dato-medida"><b>El carro:</b> hoy (2025) un carro lleno de compras cuesta apx. $200.000. O sea, con $50.000 llenas un cuarto. En cada año te mostramos para cuánto alcanzaban esos mismos $50.000.</p>
-          <p class="dato-medida">Ojo: los sueldos también cambiaron. El carro muestra solo los precios.</p>
+          <p>Inflación es cuando todo se pone más caro.</p>
+          <p class="dato-medida"><b>El carro:</b> cada gobierno parte con un carro lleno. Año a año, con la misma plata, alcanza para menos comida.</p>
+          <!-- ejemplo elwin
+           -->
+          <div id="ejemplo-carro" class="ejemplo-carro"></div>
+          <p class="dato-medida"><b>En rojo</b>, lo que se perdió ese año. <b>Vacío</b>, lo que ya se había perdido antes.</p>
+          <p class="dato-medida">Datos: IPC del Banco Central. Ojo: los sueldos también suben, y eso no está aquí.</p>
         </div>
       </article>
 
@@ -122,8 +124,8 @@
         <div class="dato-texto">
           <p class="dato-frase">¿Hay pega o no hay pega?</p>
           <p>Cuánta gente busca trabajo y no lo encuentra.</p>
-          <p class="dato-medida">Se mide en %: de cada 100 personas que quieren trabajar, cuántas no encuentran pega.</p>
-          <p class="dato-medida"><b>La mesa:</b> la parte pintada son los que buscan pega y no la encuentran. Datos del INE, vía Banco Central. En 2010 el INE cambió su forma de medir.</p>
+          <p class="dato-medida">Se mide en %: de cada 100 personas que quieren trabajar, cuántas no encuentran trabajo.</p>
+          <p class="dato-medida"><b>La maleta:</b> el pedazo que le falta son los que buscan trabajo y no lo encuentran. Datos del INE, vía Banco Central. En 2010 el INE cambió su forma de medir.</p>
         </div>
       </article>
 
@@ -136,45 +138,75 @@
         </figure>
         <div class="dato-texto">
           <p class="dato-frase">Cuántas personas son asesinadas en Chile cada año.</p>
-          <p class="dato-medida">Se cuenta por cada 100.000 habitantes.</p>
+          <p class="dato-medida"><b>Las balas:</b> imagina un grupo de 100.000 personas. Cada bala es una persona de ese grupo que fue asesinada en el año.</p>
+          <!-- ejemplo balas para año2023
+           -->
+          <div id="ejemplo-balas" class="ejemplo-carro"></div>
+          <p class="dato-medida">Más balas, más muertes.</p>
+          <p class="dato-medida">Datos: Banco Mundial e informe oficial de homicidios del Gobierno de Chile (desde 2018). En los años 90 no hay cifra exacta: fue aproximadamente menos de 3,5.</p>
         </div>
       </article>
 
       <article class="dato-explicado" style="--paso:3">
         <figure class="dato-foto">
           <img class="foto-dato" src="fotos/Portonazos.jpg" alt="Cámara de seguridad graba un portonazo de noche">
-          <h3 class="dato-titulo">Delitos</h3>
+          <h3 class="dato-titulo">Robos</h3>
         </figure>
         <div class="dato-texto">
-          <p class="dato-frase">Robos, asaltos y portonazos.</p>
+          <p class="dato-frase">Robos violentos en Chile.</p>
           <p>Lo que le puede pasar a cualquiera en la calle o en su casa.</p>
+          <p class="dato-medida">Miramos los <b>robos violentos</b>: cuando te roban con golpes o amenazas, de sorpresa (lanzazos) o te quitan el auto (portonazos).</p>
+          <p class="dato-medida"><b>El reloj:</b> es una hora en Chile. Cada persona roja al lado es un robo violento en esa hora. Más personas, más robos.</p>
+          <!-- Ejemplo del reloj (2023). Lo dibuja js/app.js → ponerEjemploReloj
+            -->
+          <div id="ejemplo-reloj" class="ejemplo-carro"></div>
+          <p class="dato-medida">Datos: denuncias y detenciones registradas por Carabineros y PDI (CEAD, Subsecretaría de Prevención del Delito), de 2005 a 2025. Ojo: si la gente denuncia más, el número sube aunque no haya más robos.</p>
         </div>
       </article>
     </section>
 
 
-    <!-- 3. LOS PRESIDENTES: llegan al final -->
+    <!-- presidentes , id de la caja <- los presidentes 
+  -->
     <section id="presidentes" class="seccion-presidentes">
       <p class="bajada">
         <span class="destacado">8 presidentes.</span>
         Elige uno y mira qué le tocó, qué hizo y qué pensó la gente.
       </p>
 
-      <!-- Aquí JavaScript dibuja los 8 presidentes (ver js/app.js → dibujarInicio) -->
+      <!-- acaavaScript dibuja los 8 presidentes 
+        -->
       <ol id="lista-presidentes" class="presidentes"></ol>
     </section>
+
+    <!--fuentes
+  -->
+    <footer id="fuentes" class="fuentes">
+      <details>
+        <summary>Fuentes de los datos</summary>
+        <ul>
+          <li><b>Inflación:</b> IPC, variación de diciembre a diciembre. Banco Central de Chile e INE (<a href="https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_PRECIOS/MN_CAP_PRECIOS/IPC_VAREMP_2023" target="_blank" rel="noopener">si3.bcentral.cl</a>).</li>
+          <li><b>Desempleo:</b> tasa de desocupación, promedio del año. Banco Central de Chile, con datos del INE (<a href="https://si3.bcentral.cl/Siete" target="_blank" rel="noopener">si3.bcentral.cl</a>). En 2010 el INE cambió su forma de medir.</li>
+          <li><b>Aprobación:</b> Encuesta CEP (Centro de Estudios Públicos), la última de cada año (<a href="https://www.cepchile.cl" target="_blank" rel="noopener">cepchile.cl</a>). En 2020 no hubo encuesta.</li>
+          <li><b>Homicidios:</b> 2003–2017, Banco Mundial, indicador «Homicidios intencionales» (<a href="https://datos.bancomundial.org/indicador/vc.ihr.psrc.p5" target="_blank" rel="noopener">datos.bancomundial.org</a>). 2018–2025, Informe Nacional de Víctimas de Homicidios Consumados 2025, Gobierno de Chile (<a href="https://prevenciondehomicidios.cl/wp-content/uploads/2026/03/Informe_de_victimas_de_homicidios_consumados_2025_VF.pdf" target="_blank" rel="noopener">prevenciondehomicidios.cl</a>).</li>
+          <li><b>Robos violentos:</b> casos policiales (denuncias y detenciones), total país, 2005–2025. CEAD, Subsecretaría de Prevención del Delito (<a href="https://cead.minsegpublica.gob.cl" target="_blank" rel="noopener">cead.minsegpublica.gob.cl</a>).</li>
+        </ul>
+      </details>
+    </footer>
 
   </main>
 
 
-  <!-- ===================== PANTALLA 2: FICHA ===================== -->
-  <!-- Una sola ficha que se rellena con el presidente que elijas -->
+  <!-- Pantalla Nro2   -->
+  <!-- Una sola ficha que se rellena con el presidente 
+ -->
   <section id="ficha" class="pantalla">
 
     <nav class="barra">
       <div class="barra-izq">
         <a href="#presidentes" class="volver">← Los 8 presidentes</a>
-        <!-- Lleva a la explicación de los datos, en el inicio -->
+        <!-- Lleva a la explicación de los datos, en el inicio
+          -->
         <a href="#que-son" class="que-son-boton">
           <span class="que-son-pregunta">¿Qué son?</span>
           <span class="que-son-caja"><b>DATOS:</b> Economía y seguridad</span>
@@ -187,7 +219,7 @@
       </div>
     </nav>
 
-    <!-- Quién es -->
+    <!-- Quien es -->
     <header class="ficha-cabeza">
       <img id="ficha-foto" class="foto grande" alt="">
       <div>
@@ -196,19 +228,24 @@
       </div>
     </header>
 
-    <!-- AÑO A AÑO: una fila por año, y los hitos entre medio.
+    <!--  una fila por año, y los hitos entre medio.
          Lo dibuja js/app.js → dibujarAnios, con los datos de js/datos.js → anios / hitos -->
     <div class="anios-cabeza">
       <span>Año</span>
       <span>Percepción ciudadana</span>
       <span>Inflación y desempleo<small>Economía</small></span>
-      <span>Homicidios y delitos<small>Seguridad</small></span>
+      <span>Homicidios y robos violentos<small>Seguridad</small></span>
     </div>
     <div id="ficha-anios" class="anios"></div>
 
+    <!-- Link chico a las fuentes (están al final del inicio
+      -->
+    <a href="#fuentes" class="link-fuentes">Fuentes de los datos</a>
+
   </section>
 
-  <!-- Primero los datos, después el código que los usa -->
+  <!-- Primero los datos, después el código que los usa
+    -->
   <script src="js/datos.js"></script>
   <script src="js/app.js"></script>
 </body>

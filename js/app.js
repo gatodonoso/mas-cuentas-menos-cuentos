@@ -1,29 +1,22 @@
-/* =====================================================================
-   APP: aquí está todo el comportamiento de la página.
-   Lee los datos de datos.js y los convierte en cosas que se ven.
-
-   Cómo funciona, en simple:
-   1. Al abrir la página se dibujan los 8 presidentes (dibujarInicio).
-   2. Al hacer click en uno, la dirección cambia a  index.html#aylwin
-   3. Cada vez que cambia esa dirección, se llama a "mostrar()",
-      que decide si se ve el inicio o la ficha de un presidente.
-   (Así también funciona el botón "atrás" del navegador.)
-   ===================================================================== */
+/* app: todo lo que dibuja y mueve la página, con los datos de datos.js
+*/
 
 
-/* ---------- Atajos para no escribir tanto ---------- */
+/* atajo para buscar cajas del html
+*/
 const $ = (selector) => document.querySelector(selector);
 
 
 
-/* ---------- 1. INICIO: los 8 presidentes ---------- */
+/* inicio: los 8 presidentes
+*/
 function dibujarInicio() {
   const lista = $("#lista-presidentes");
 
   PRESIDENTES.forEach((p, i) => {
-    // Creamos un elemento <li> y le escribimos su HTML adentro
+    // un <li> por presidente
     const item = document.createElement("li");
-    item.style.setProperty("--i", i);   // su posición: sirve para que lleguen uno tras otro
+    item.style.setProperty("--i", i);   // posición, para que lleguen uno tras otro
     item.innerHTML = `
       <a href="#${p.id}" class="presidente">
         <img class="foto" src="${p.foto}" alt="Foto de ${p.nombre}">
@@ -37,8 +30,8 @@ function dibujarInicio() {
 }
 
 
-/* Si una foto todavía no existe en la carpeta fotos/,
-   mostramos las iniciales en vez de una imagen rota. */
+/* si falta una foto, pone las iniciales
+*/
 function ponerRespaldoAFotos() {
   document.querySelectorAll("img.foto").forEach((img) => {
     img.onerror = () => {
@@ -53,15 +46,16 @@ function ponerRespaldoAFotos() {
 }
 
 
-/* ---------- 2. FICHA: un presidente ---------- */
+/* ficha: un presidente
+*/
 function dibujarFicha(p) {
   const i = PRESIDENTES.indexOf(p);
 
-  // Cabeza
+  // cabeza
   $("#ficha-nombre").textContent = p.nombre;
   $("#ficha-periodo").textContent = `${p.periodo} · ${p.partido}`;
   $("#contador").textContent = `${i + 1} de ${PRESIDENTES.length}`;
-  // La foto se crea de nuevo cada vez (por si la anterior no existía)
+  // la foto se crea de nuevo cada vez
   const foto = document.createElement("img");
   foto.id = "ficha-foto";
   foto.className = "foto grande";
@@ -74,90 +68,230 @@ function dibujarFicha(p) {
 }
 
 
-/* AÑO A AÑO: una fila por año (año + torta + economía + seguridad)
-   y, antes de cada año, sus hitos (un punto y el texto). */
+/* año a año: una fila por año y los hitos antes de su año
+*/
 function dibujarAnios(p) {
   const caja = $("#ficha-anios");
 
-  // Si todavía no cargamos los años de este presidente, avisamos
+  // si no hay años, avisa
   if (!p.anios) {
     caja.innerHTML = `<p class="anios-pendiente">Estamos juntando los datos de este gobierno.</p>`;
     return;
   }
 
   const ultimo = p.anios[p.anios.length - 1].anio;
-  const punto = (h) => `<p class="hito-punto"><span><b>${h.fecha}</b> · ${h.texto}</span></p>`;
+  const punto = (h) => `
+    <div class="hito-punto">
+      <div>
+        <p><b>${h.fecha}</b> · <span class="hito-titulo">${h.texto}</span></p>
+        ${h.detalle ? `<p class="hito-detalle">${h.detalle}</p>` : ""}
+      </div>
+    </div>`;
 
-  caja.innerHTML = p.anios.map((a) => {
-    // Los hitos de este año van justo antes de su fila
+  // el carro parte lleno (1) y cada año pierde lo de la inflación
+  let carro = 1;
+
+  caja.innerHTML = p.anios.map((a, i) => {
+    // hitos de este año, antes de su fila
     const hitos = (p.hitos || []).filter((h) => h.anio === a.anio).map(punto).join("");
 
-    // Si ese año no hubo encuesta, en vez de la torta va un aviso
+    // sin encuesta: aviso en vez de torta
     const percepcion = a.aprueba == null
       ? `<p class="sin-encuesta">${a.nota || "No hubo encuesta CEP este año."}</p>`
       : torta(a);
+
+    // carro antes y después de este año
+    const antes = carro;
+    if (IPC_DIC[a.anio] != null) carro = antes * alcanza(IPC_DIC[a.anio]);
+
+    // gobiernos de 6 años: marca el 4to año
+    const marca4 = (p.anios.length > 4 && i === 3)
+      ? `<p class="nota-4anios">4.º año: hasta aquí llegan los gobiernos de 4 años.</p>` : "";
 
     return `
       ${hitos}
       <div class="fila-anio">
         <span class="anio-numero">${a.anio}</span>
         ${percepcion}
-        <div class="celda-eje celda-economia">${economia(a.anio)}</div>
-        <div class="celda-eje celda-seguridad"></div>   <!-- Seguridad: lo diseñan ustedes -->
+        <div class="celda-eje celda-economia">${economia(a.anio, antes, carro)}${marca4}</div>
+        <div class="celda-eje celda-seguridad">${seguridad(a.anio)}</div>
       </div>`;
   }).join("")
-  // Hitos que pasaron después del último año con encuesta (van al final)
-  + (p.hitos || []).filter((h) => h.anio > ultimo).map(punto).join("");
+  // hitos después del último año
+  + (p.hitos || []).filter((h) => h.anio > ultimo).map(punto).join("")
+  // resumen al final
+  + resumenGobierno(p);
 
-  // Que las filas aparezcan al bajar (igual que las historias del inicio)
+  // las filas aparecen al bajar
   caja.querySelectorAll(".fila-anio, .hito-punto").forEach((el) => vigilante.observe(el));
 }
 
 
-/* ---------- ECONOMÍA: el carro (inflación) y la mesa (desempleo) ---------- */
+/* resumen: cómo quedó el carro al final del gobierno
+*/
+function resumenGobierno(p) {
+  const anios = p.anios.map((a) => a.anio).filter((anio) => IPC_DIC[anio] != null);
+  if (anios.length === 0) return "";
 
-// Número con coma decimal: 12.8 → "12,8"
-const coma = (n, dec = 1) => n.toFixed(dec).replace(".", ",");
+  // carro al final de una lista de años
+  const carroAlFinal = (lista) => lista.reduce((f, anio) => f * alcanza(IPC_DIC[anio]), 1);
 
-function economia(anio) {
-  const inflacion = IPC_DIC[anio];
-  const desempleo = DESEMPLEO[anio];
-  if (inflacion == null && desempleo == null) return "";
+  const f = carroAlFinal(anios);
+  const inflacionTotal = (1 / f - 1) * 100;                    // subida de precios en todo el gobierno
+  const porAnio = Math.round((1 - f) * 100) / anios.length;    // promedio por año
 
-  const carros = cuantosCarros(anio);
+  // gobiernos de 6 años: aviso
+  let aviso = "";
+  if (anios.length > 4) {
+    const en4 = Math.round((1 - carroAlFinal(anios.slice(0, 4))) * 100);
+    aviso = `<p class="resumen-aviso"><b>Ojo:</b> este gobierno duró ${anios.length} años y los demás 4.
+      Con más años, los precios tienen más tiempo para subir, así que esta cifra le juega un poco en contra.
+      Para comparar mejor, mira el promedio por año o sus primeros 4 años: <b>−${en4}% de carro</b>.</p>`;
+  }
+
+  return `
+    <div class="fila-anio resumen-gobierno">
+      <p class="resumen-titulo">Todo su gobierno<span>${anios[0]} – ${anios[anios.length - 1]}</span></p>
+      <div class="celda-eje celda-economia">
+        ${carroDelAnio(1, f, "En todos sus años de gobierno",
+            [`Inflación de todo el gobierno: ${coma(inflacionTotal)}%`,
+             `En promedio: −${coma(porAnio)}% de carro cada año`])}
+        ${aviso}
+      </div>
+      <div class="celda-eje celda-seguridad"></div>
+    </div>`;
+}
+
+
+/* seguridad: homicidios y robos
+*/
+
+/* celda de seguridad: pistola arriba, reloj abajo
+*/
+function seguridad(anio) {
+  return homicidios(anio) + robos(anio);
+}
+
+/* homicidios: pistola con balas, o sin datos
+*/
+function homicidios(anio) {
+  const tasa = HOMICIDIOS[anio];
+  // años 90: solo aproximado
+  const a90 = HOMICIDIOS_ANIOS90;
+  if (tasa == null && anio >= a90.desde && anio <= a90.hasta) {
+    return `<p class="sin-datos">Homicidios: sin dato exacto.<br>Aprox. ${a90.texto} personas asesinadas por cada 100.000 habitantes.</p>`;
+  }
+  if (tasa == null) return `<p class="sin-datos">Homicidios: sin datos</p>`;
+  return pistolaConBalas(tasa);
+}
+
+/* robos: casos del año / 8760 horas = robos por hora
+*/
+function robos(anio) {
+  const casos = ROBOS_VIOLENTOS[anio];
+  if (casos == null) return `<p class="sin-datos">Robos violentos: sin datos</p>`;
+  return reloj(casos / 8760);
+}
+
+/* reloj con una persona roja por cada robo en una hora
+*/
+function reloj(porHora) {
+  const personas = Math.round(porHora);
   return `
     <div class="eco-item">
-      <div class="carros">${dibujarCarros(carros)}</div>
-      <div>
-        <p class="eco-num">${coma(inflacion)}%</p>
-        <p class="eco-label">inflación del año</p>
-        <p class="eco-detalle">Con $50 mil: ${coma(carros, 2)} ${coma(carros, 2) === "1,00" ? "carro" : "carros"}</p>
+      <div class="reloj-personas" role="img" aria-label="${personas} robos violentos por hora">
+        <img class="reloj" src="fotos/reloj.svg" alt="">
+        <div class="personas">${'<img class="persona" src="fotos/persona.svg" alt="">'.repeat(personas)}</div>
       </div>
-    </div>
-    <div class="eco-item">
-      ${mesa(desempleo)}
       <div>
-        <p class="eco-num">${coma(desempleo)}%</p>
-        <p class="eco-label">desempleo</p>
-        <p class="eco-detalle">${Math.round(desempleo)} de cada 100 no encuentran pega</p>
+        <p class="eco-num">${personas} por hora</p>
+        <p class="eco-label">robos violentos en Chile</p>
+        <p class="eco-detalle">Uno cada ${coma(60 / porHora)} minutos</p>
       </div>
     </div>`;
 }
 
-/* ¿Cuántos carros llenaban $50.000 ese año?
-   Hoy (2025) un carro lleno cuesta $200.000, o sea $50.000 = 0,25 carros.
-   Hacia atrás, los precios eran más bajos: deshacemos la inflación de cada
-   año, desde el siguiente hasta 2025. */
-function cuantosCarros(anio) {
-  let veces = 1;
-  for (let t = anio + 1; t <= CARRO.anioHoy; t++) veces *= 1 + IPC_DIC[t] / 100;
-  return (CARRO.pesos / CARRO.carroLlenoHoy) * veces;
+/* pistola con una bala por persona asesinada (cada 100.000). 4,5 = 4 balas y media
+*/
+function pistolaConBalas(tasa) {
+  const balas = [];
+  for (let i = 0; i < Math.ceil(tasa); i++) balas.push(dibujarBala(Math.min(1, tasa - i)));
+  return `
+    <div class="eco-item">
+      <div class="pistola-balas" role="img" aria-label="${coma(tasa)} balas: ${coma(tasa)} personas asesinadas por cada 100.000 habitantes">
+        <img class="pistola" src="fotos/pistola.png" alt="">
+        <div class="balas">${balas.join("")}</div>
+      </div>
+      <div>
+        <p class="eco-num">${coma(tasa)}</p>
+        <p class="eco-label">personas asesinadas</p>
+        <p class="eco-detalle">por cada 100.000 habitantes</p>
+      </div>
+    </div>`;
 }
 
-/* El canasto del carro (en la imagen fotos/carro_super.png, de 600 x 494) */
+/* una bala, parte = cuánto se ve (1 entera, 0,5 media)
+*/
+function dibujarBala(parte) {
+  return `<span class="bala" style="--parte:${parte}"><img src="fotos/bala.svg" alt=""></span>`;
+}
+
+
+/* economía: carro (inflación) y maleta (desempleo)
+*/
+
+// número con coma: 12.8 → "12,8"
+const coma = (n, dec = 1) => n.toFixed(dec).replace(".", ",");
+
+/* antes y despues = cuánto carro había antes y después del año (1 = lleno)
+*/
+function economia(anio, antes, despues) {
+  const inflacion = IPC_DIC[anio];
+  const desempleo = DESEMPLEO[anio];
+  if (inflacion == null && desempleo == null) return "";
+
+  const etiqueta = despues > antes
+    ? "Este año los precios bajaron: un poco más de comida"
+    : "Misma plata, menos comida";
+
+  return `
+    ${inflacion == null ? "" : carroDelAnio(antes, despues, etiqueta,
+        [`Inflación del año: ${coma(inflacion)}%`,
+         despues > antes ? "Este año no se perdió nada" : `En rojo, lo que se perdió en ${anio}`])}
+    <div class="eco-item">
+      ${maleta(desempleo)}
+      <div>
+        <p class="eco-num">${coma(desempleo)}%</p>
+        <p class="eco-label">desempleo</p>
+        <p class="eco-detalle">${Math.round(desempleo)} de cada 100 no encuentran trabajo</p>
+      </div>
+    </div>`;
+}
+
+/* cuánto del carro alcanza: 1 / (1 + inflación/100). 27,3% da 0,79
+*/
+const alcanza = (inflacion) => 1 / (1 + inflacion / 100);
+
+/* carro con su número. el número es solo lo perdido ese año (la franja roja)
+*/
+function carroDelAnio(antes, despues, etiqueta, detalles) {
+  const perdido = Math.round((1 - despues) * 100) - Math.round((1 - antes) * 100);
+  return `
+    <div class="eco-item">
+      <div class="carros">${dibujarCarro(antes, despues)}</div>
+      <div>
+        <p class="eco-num ${perdido > 0 ? "pierde" : ""}">${perdido > 0 ? "−" + perdido : "+" + Math.abs(perdido)}% de carro</p>
+        <p class="eco-label">${etiqueta}</p>
+        ${detalles.map((d) => `<p class="eco-detalle">${d}</p>`).join("")}
+      </div>
+    </div>`;
+}
+
+/* esquinas del canasto en carro_super.png (600 x 494)
+*/
 const CANASTO = [[138, 111], [580, 132], [559, 278], [247, 324]];
 
-// Ancho del canasto a una altura "y" (para llenar por ÁREA, no solo por altura)
+// ancho del canasto a una altura y (para llenar por área)
 function anchoEn(y) {
   const xs = [];
   for (let i = 0; i < CANASTO.length; i++) {
@@ -167,7 +301,7 @@ function anchoEn(y) {
   return xs.length >= 2 ? Math.max(...xs) - Math.min(...xs) : 0;
 }
 
-// Altura hasta donde llega la comida para llenar una fracción (0 a 1) del canasto
+// altura de la comida para llenar una parte (0 a 1) del canasto
 function nivelDeLlenado(fraccion) {
   const arriba = 111, abajo = 324;
   let total = 0;
@@ -180,7 +314,7 @@ function nivelDeLlenado(fraccion) {
   return arriba;
 }
 
-// La comida: cajitas y frutas de colores, siempre las mismas (no cambian al recargar)
+// la comida, siempre igual
 let comidaSVG = null;
 function comida() {
   if (comidaSVG) return comidaSVG;
@@ -200,45 +334,71 @@ function comida() {
   return (comidaSVG = piezas);
 }
 
-// Dibuja 1 o 2 carros: el primero se llena, y lo que sobra va al segundo
+/* dibuja el carro: comida = lo que alcanza, rojo = lo perdido este año, vacío = lo perdido antes
+*/
 let idCarro = 0;
-function dibujarCarros(carros) {
-  const llenos = [Math.min(carros, 1)];
-  if (carros > 1) llenos.push(Math.min(carros - 1, 1));
-  return llenos.map((f) => {
-    const id = "c" + idCarro++;
-    const nivel = nivelDeLlenado(f);
-    return `
-      <svg class="carro" viewBox="0 0 600 494" role="img" aria-label="Carro de súper lleno en un ${Math.round(f * 100)}%">
-        <defs>
-          <clipPath id="${id}a"><polygon points="${CANASTO.join(" ")}"/></clipPath>
-          <clipPath id="${id}b"><rect x="0" y="${nivel}" width="600" height="494"/></clipPath>
-        </defs>
-        <g clip-path="url(#${id}a)"><g clip-path="url(#${id}b)">${comida()}</g></g>
-        <image href="fotos/carro_super.png" width="600" height="494"/>
-      </svg>`;
-  }).join("");
+function dibujarCarro(antes, despues) {
+  const id = "c" + idCarro++;
+  const nivelAntes = nivelDeLlenado(Math.min(antes, 1));      // altura antes
+  const nivelDespues = nivelDeLlenado(Math.min(despues, 1));  // altura después
+  const rojo = nivelDespues > nivelAntes                       // en svg, más abajo = y más grande
+    ? `<rect class="carro-falta" x="0" y="${nivelAntes}" width="600" height="${nivelDespues - nivelAntes}"/>`
+    : "";
+  return `
+    <svg class="carro" viewBox="0 0 600 494" role="img" aria-label="Carro de súper: queda un ${Math.round(Math.min(despues, 1) * 100)}%">
+      <defs>
+        <clipPath id="${id}a"><polygon points="${CANASTO.join(" ")}"/></clipPath>
+        <clipPath id="${id}b"><rect x="0" y="${nivelDespues}" width="600" height="494"/></clipPath>
+      </defs>
+      <g clip-path="url(#${id}a)">
+        ${rojo}
+        <g clip-path="url(#${id}b)">${comida()}</g>
+      </g>
+      <image href="fotos/carro_super.png" width="600" height="494"/>
+    </svg>`;
 }
 
-/* La mesa redonda: la tajada pintada son los que no encuentran pega.
-   Dibujo: fotos/empleo_mesa_redonda 2.svg (fondo transparente).
-   La mesa es un círculo dentro del dibujo (centro 382,419 y radio 230, en un dibujo de 735 x 771). */
-function mesa(desempleo) {
+/* ejemplo del carro: aylwin 1991
+*/
+function ponerEjemploCarro() {
+  const antes = alcanza(IPC_DIC[1990]);
+  const despues = antes * alcanza(IPC_DIC[1991]);
+  $("#ejemplo-carro").innerHTML =
+    `<p class="ejemplo-anio">Ejemplo: Aylwin, 1991 (su 2.º año)</p>` +
+    carroDelAnio(antes, despues, "Misma plata, menos comida",
+      [`Inflación del año: ${coma(IPC_DIC[1991])}%`, "En rojo, lo que se perdió en 1991"]);
+}
+
+/* ejemplo de las balas: 2005
+*/
+function ponerEjemploBalas() {
+  $("#ejemplo-balas").innerHTML =
+    `<p class="ejemplo-anio">Ejemplo: 2005</p>` + pistolaConBalas(HOMICIDIOS[2005]);
+}
+
+/* ejemplo del reloj: 2023
+*/
+function ponerEjemploReloj() {
+  $("#ejemplo-reloj").innerHTML =
+    `<p class="ejemplo-anio">Ejemplo: 2023</p>` + reloj(ROBOS_VIOLENTOS[2023] / 8760);
+}
+
+/* maleta: el css le corta el % de desempleo (--pct)
+*/
+function maleta(desempleo) {
   return `
-    <div class="mesa" role="img" aria-label="Mesa redonda con ${coma(desempleo)}% pintado">
-      <img src="fotos/empleo_mesa_redonda 1.svg" alt="">
-      <span class="mesa-tajada" style="--pct:${desempleo}%"></span>
+    <div class="maleta" role="img" aria-label="Maleta a la que le falta un ${coma(desempleo)}%">
+      <img src="fotos/bag_noun.svg" alt="" style="--pct:${desempleo}%">
     </div>`;
 }
 
 
-/* La torta de aprobación (en realidad una "dona": torta con hoyo al centro).
-   Se pinta con conic-gradient: cada color ocupa su porcentaje de la vuelta.
-   Adentro del hoyo van los tres números. */
+/* torta de aprobación, con los 3 números al centro
+*/
 function torta(a) {
   const otros = 100 - a.aprueba - a.desaprueba;
-  const fin1 = a.aprueba;                 // aprueba:    de 0 a fin1
-  const fin2 = a.aprueba + a.desaprueba;  // desaprueba: de fin1 a fin2, y el resto es "otros"
+  const fin1 = a.aprueba;                 // aprueba: de 0 a fin1
+  const fin2 = a.aprueba + a.desaprueba;  // desaprueba: de fin1 a fin2, el resto otros
 
   return `
     <figure class="torta" title="${a.encuesta}"
@@ -252,14 +412,14 @@ function torta(a) {
 }
 
 
-/* ---------- 3. AL BAJAR (scroll) ---------- */
+/* al bajar (scroll)
+*/
 
-/* La portada: calcula cuánto has bajado dentro de .intro (de 0 a 1)
-   y se lo pasa al CSS como --avance. El CSS usa ese número para
-   achicar la frase, subirla y hacer aparecer la motivación. */
+/* portada: cuánto bajaste (0 a 1), se lo pasa al css como --avance
+*/
 function animarPortada() {
   const intro = $(".intro");
-  const recorrido = intro.offsetHeight - window.innerHeight;   // cuánto se puede bajar dentro de la portada
+  const recorrido = intro.offsetHeight - window.innerHeight;   // cuánto se puede bajar
   const avance = Math.min(1, Math.max(0, window.scrollY / recorrido));
   intro.style.setProperty("--avance", avance);
 }
@@ -268,23 +428,22 @@ window.addEventListener("scroll", animarPortada);
 window.addEventListener("resize", animarPortada);
 
 
-/* Las historias y los presidentes: cuando entran a la pantalla,
-   les ponemos la clase "visible" y el CSS los hace aparecer.
-   (IntersectionObserver = "avísame cuando esto se vea") */
+/* vigilante: cuando algo aparece en pantalla le pone la clase visible
+*/
 const vigilante = new IntersectionObserver((cosas) => {
   cosas.forEach((cosa) => {
     if (cosa.isIntersecting) {
       cosa.target.classList.add("visible");
-      vigilante.unobserve(cosa.target);   // ya apareció, no lo seguimos mirando
+      vigilante.unobserve(cosa.target);   // ya apareció, deja de mirarlo
     }
   });
-}, { threshold: 0.3 });   // aparece cuando se ve el 30%
+}, { threshold: 0.3 });   // cuando se ve el 30%
 
 document.querySelectorAll(".historia, .presidentes, .dato-explicado").forEach((el) => vigilante.observe(el));
 
 
-/* "¿Qué son?": mientras bajas, cada foto se corre un poco a la derecha.
-   --mover va de 0 (el bloque recién asoma por abajo) a 1 (ya se va por arriba). */
+/* mueve las fotos de qué son al bajar 
+*/
 function moverFotos() {
   document.querySelectorAll(".dato-explicado").forEach((el) => {
     const r = el.getBoundingClientRect();
@@ -297,9 +456,10 @@ window.addEventListener("resize", moverFotos);
 moverFotos();
 
 
-/* ---------- 4. NAVEGACIÓN ---------- */
+/* navegación
+*/
 
-// Decide qué pantalla mostrar según la dirección (#aylwin, #frei, ...)
+// qué pantalla mostrar según la dirección (#aylwin...)
 function mostrar() {
   const id = location.hash.replace("#", "");
   const p = PRESIDENTES.find((x) => x.id === id);
@@ -313,8 +473,7 @@ function mostrar() {
     $("#inicio").classList.add("activa");
   }
 
-  // Si la dirección apunta a una sección del inicio (#presidentes, #que-son),
-  // saltamos directo ahí. Si no, arriba de todo.
+  // si es una sección del inicio, baja hasta ahí; si no, arriba
   const seccion = !p && id ? document.getElementById(id) : null;
   if (seccion) {
     seccion.scrollIntoView();
@@ -324,7 +483,7 @@ function mostrar() {
   animarPortada();
 }
 
-// Pasar al presidente anterior (-1) o siguiente (+1)
+// anterior (-1) o siguiente (+1)
 function mover(paso) {
   const i = PRESIDENTES.findIndex((x) => "#" + x.id === location.hash);
   if (i === -1) return;
@@ -335,7 +494,7 @@ function mover(paso) {
 $("#anterior").addEventListener("click", () => mover(-1));
 $("#siguiente").addEventListener("click", () => mover(+1));
 
-// Teclado: flechas para moverse, Esc para volver al inicio
+// teclado: flechas y esc
 document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft")  mover(-1);
   if (e.key === "ArrowRight") mover(+1);
@@ -345,6 +504,10 @@ document.addEventListener("keydown", (e) => {
 window.addEventListener("hashchange", mostrar);
 
 
-/* ---------- Arrancar ---------- */
+/* arrancar
+*/
 dibujarInicio();
+ponerEjemploCarro();
+ponerEjemploBalas();
+ponerEjemploReloj();
 mostrar();

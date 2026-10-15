@@ -1,0 +1,68 @@
+<table width="100%"  style="border:1px solid #e6e6e6;">
+				<tbody>
+					<tr><td colspan="12" style="border:1px solid #e6e6e6;">&nbsp;</td></tr>
+			<tr>
+				<td style="border:1px solid #e6e6e6;"><b>Medida</b></td><td colspan="11" style="text-align: left;">Frecuencia
+				</td>
+			</tr>
+			<tr>
+				<td style="border:1px solid #e6e6e6;"><b>Tipo de Datos</b></td><td colspan="11" style="text-align: left;border:1px solid #e6e6e6;">Casos Policiales
+				</td>
+			</tr>
+			<tr><td colspan="12" style="border:1px solid #e6e6e6;">&nbsp;</td></tr>
+		<tr>
+			<td colspan="12" style="text-align: left; background-color:#eaeaea;border:1px solid #e6e6e6;"><b>Unidad Territorial</b></td>
+		</tr>
+		<tr>
+			<td style="border:1px solid #e6e6e6;text-align: left;"><b>Regiones</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">TOTAL PA&Iacute;S</td>
+		</tr>
+				<tr>
+					<td style="border:1px solid #e6e6e6;text-align: left;"><b>Provincias</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">(Todas)</td>
+				</tr>
+				<tr>
+					<td style="border:1px solid #e6e6e6;text-align: left;"><b>Comunas</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">(Todas)</td>
+				</tr>
+		<tr><td colspan="12" style="border:1px solid #e6e6e6;text-align: left;">&nbsp;</td></tr>
+		<tr>
+			<td colspan="12" style="text-align: left; background-color:#eaeaea;border:1px solid #e6e6e6;"><b>Delito</b></td>
+		</tr>
+		<tr>
+			<td style="border:1px solid #e6e6e6;text-align: left;"><b>Familia de delitos</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">Robos violentos</td>
+		</tr>
+				<tr>
+					<td style="border:1px solid #e6e6e6;text-align: left;"><b>Grupo</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">(Todos)</td>
+				</tr>
+				<tr>
+					<td style="border:1px solid #e6e6e6;text-align: left;"><b>Subgrupo</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">(Todos)</td>
+				</tr>
+		<tr><td colspan="12" style="border:1px solid #e6e6e6;text-align: left;">&nbsp;</td></tr>	
+		<tr>
+			<td colspan="12" style="text-align: left; background-color:#eaeaea;border:1px solid #e6e6e6;"><b>Temporalidad</b></td>
+		</tr>
+		<tr>
+			<td style="border:1px solid #e6e6e6;text-align: left; font-weight:bold;">A&ntilde;o</td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005</td>
+		</tr>
+				<tr>
+					<td style="border:1px solid #e6e6e6;text-align: left;"><b>Trimestre</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">(Todos)</td>
+				</tr>
+				<tr>
+					<td style="border:1px solid #e6e6e6;text-align: left;"><b>Mes</b></td><td colspan="11" style="border:1px solid #e6e6e6;text-align: left;">(Todos)</td>
+				</tr>
+			<tr><td colspan="12" style="border:1px solid #e6e6e6;text-align: left;">&nbsp;</td></tr>
+		</tbody>
+	</table><br><div class="cont-reportes col-md-12"><table width="100%" style="border:1px solid #ccc;min-width: 100px;">
+				<thead>
+				<tr>
+					<th colspan="1" style="border:1px solid #ccc;min-width: 310px;"></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2005</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2006</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2007</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2008</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2009</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2010</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2011</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2012</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2013</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2014</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2015</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2016</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2017</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2018</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2019</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2020</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2021</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2022</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2023</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2024</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2025</center></th><th colspan="0" style="border:1px solid #ccc;background:#1d89c8;color:#ffffff;"><center>2026</center></th>
+				</tr>
+				<tr>
+					<th style="border:1px solid #ccc;min-width: 200px !important;background:#1d89c8;color:white; font-size:14px;text-align:center;">DELITOS O FALTAS</th><!--th>&nbsp;</th--><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th><th style="border:1px solid #ccc;background:#1d89c8;"><center>&nbsp;</center></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr class="formato_1 strong" style="background: #075F96; color:white; font-weight:bold; font-size:14px;text-transform: uppercase;">
+								<td class="text-left" style="border:1px solid #ccc;min-width: 100px;">Robos violentos</td><!--td>1</td-->
+							<td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">74.348,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">78.134,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">93.344,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">89.494,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">91.758,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">81.541,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">91.798,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">81.520,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">92.904,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">106.175,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">106.322,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">101.966,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">104.454,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">107.845,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">111.133,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">86.709,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">65.490,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">107.317,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">116.435,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">120.548,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">109.419,0000000000</td><td style="border:1px solid #ccc;min-width: 100px;mso-number-format:'#,##0';">48.617,0000000000</td>
+							</tr>
+					</tbody>
+					</table></div>
